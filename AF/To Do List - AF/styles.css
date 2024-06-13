@@ -1,0 +1,90 @@
+/* Estilos gerais */
+body {
+    font-family: 'Poppins', sans-serif;
+    transition: background-color 0.5s, color 0.5s;
+}
+
+/* Estilos para Modo Claro */
+body.light-mode {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+body.light-mode .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+body.light-mode .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+body.light-mode .list-group-item {
+    background-color: #ffffff;
+    color: #000000; /* Definindo a cor do texto */
+}
+
+/* Estilos para Modo Escuro */
+body.dark-mode {
+    background-color: #232425;
+    color: #ffffff;
+}
+
+body.dark-mode .btn-primary {
+    background-color: #228a2b;
+    border-color: #228a2b;
+}
+
+body.dark-mode .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+body.dark-mode .list-group-item {
+    background-color: #495057;
+    color: #000000; /* Mantendo a cor do texto preto para os itens da lista */
+}
+
+/* Estilo para tarefas concluídas */
+.completed {
+    text-decoration: line-through;
+}
+
+/* Ajuste de posição */
+.container {
+    margin-top: 15vh; /* Ajuste este valor conforme necessário */
+}
+
+/* Estilo para o campo de data */
+.date-input {
+    max-width: 150px; /* Ajuste a largura conforme necessário */
+}
+
+/* Animações para itens da lista */
+.task-item {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.task-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo para o botão de troca de tema */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    font-size: 24px;
+    transition: color 0.5s;
+}
+
+body.light-mode .theme-toggle {
+    color: #ffcc00; /* Cor do sol */
+}
+
+body.dark-mode .theme-toggle {
+    color: #ffffff; /* Cor da lua */
+}

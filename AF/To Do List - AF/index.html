@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Tarefas Online</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Custom CSS -->
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body class="light-mode">
+    <div class="theme-toggle" id="theme-toggle">
+        <i class="fas fa-sun"></i>
+    </div>
+    <div class="container d-flex flex-column justify-content-center align-items-center min-vh-100">
+        <header class="text-center mb-4">
+            <h1>ToDo List</h1>
+        </header>
+        
+        <main class="w-100">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <form id="task-form">
+                        <div class="input-group mb-3">
+                            <input type="text" id="task-input" class="form-control" placeholder="Adicionar Tarefa" required>
+                            <input type="date" id="task-date" class="form-control date-input" required>
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">Adicionar</button>
+                            </div>
+                        </div>
+                    </form>
+                    
+                    <ul id="task-list" class="list-group">
+                        <!-- Tasks will appear here -->
+                    </ul>
+                </div>
+            </div>
+        </main>
+        
+        <footer class="text-center mt-4">
+            <p>&copy; by Diego Crisp</p>
+        </footer>
+    </div>
+    
+    <!-- Bootstrap and jQuery JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const taskForm = document.getElementById('task-form');
+            const taskInput = document.getElementById('task-input');
+            const taskDate = document.getElementById('task-date');
+            const taskList = document.getElementById('task-list');
+            const themeToggle = document.getElementById('theme-toggle');
+            const body = document.body;
+
+            themeToggle.addEventListener('click', function () {
+                if (body.classList.contains('light-mode')) {
+                    body.classList.replace('light-mode', 'dark-mode');
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                } else {
+                    body.classList.replace('dark-mode', 'light-mode');
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                }
+            });
+            
+            taskForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                addTask(taskInput.value, taskDate.value);
+                taskInput.value = '';
+                taskDate.value = '';
+            });
+
+            function addTask(task, date) {
+                if (task.trim() === '' || date.trim() === '') {
+                    alert('Os campos de tarefa e data são obrigatórios!');
+                    return;
+                }
+
+                // Formatar a data para o formato "DIA/MÊS/ANO"
+                const [year, month, day] = date.split('-');
+                const formattedDate = `${day}/${month}/${year}`;
+
+                const li = document.createElement('li');
+                li.className = 'list-group-item d-flex justify-content-between align-items-center task-item';
+                li.innerHTML = `
+                    <span>${task}</span>
+                    <span class="badge badge-secondary">${formattedDate}</span>
+                    <div>
+                        <button class="btn btn-warning btn-sm mr-2 edit-btn">✎</button>
+                        <button class="btn btn-success btn-sm mr-2 complete-btn">✓</button>
+                        <button class="btn btn-danger btn-sm delete-btn">✗</button>
+                    </div>
+                `;
+
+                // Set background color based on date
+                const today = new Date();
+                const taskDate = new Date(date);
+                const diffTime = taskDate - today;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                if (diffDays < 0) {
+                    li.style.backgroundColor = '#ffcccc'; // red for overdue
+                } else if (diffDays === 0) {
+                    li.style.backgroundColor = '#ffffcc'; // yellow for due today
+                } else {
+                    li.style.backgroundColor = '#ccffcc'; // green for future dates
+                }
+
+                taskList.appendChild(li);
+
+                li.querySelector('.edit-btn').addEventListener('click', function () {
+                    editTask(li);
+                });
+
+                li.querySelector('.complete-btn').addEventListener('click', function () {
+                    li.querySelector('span').classList.toggle('completed');
+                });
+
+                li.querySelector('.delete-btn').addEventListener('click', function () {
+                    taskList.removeChild(li);
+                });
+            }
+
+            function editTask(li) {
+                const taskSpan = li.querySelector('span');
+                const taskDateBadge = li.querySelector('.badge');
+                const newTask = prompt('Edite a tarefa:', taskSpan.textContent);
+                const currentFormattedDate = taskDateBadge.textContent;
+                const [day, month, year] = currentFormattedDate.split('/');
+                const newDate = prompt('Edite a data (AAAA-MM-DD):', `${year}-${month}-${day}`);
+                
+                if (newTask !== null && newTask.trim() !== '') {
+                    taskSpan.textContent = newTask;
+                }
+                if (newDate !== null && newDate.match(/^\d{4}-\d{2}-\d{2}$/)) {
+                    const [newYear, newMonth, newDay] = newDate.split('-');
+                    taskDateBadge.textContent = `${newDay}/${newMonth}/${newYear}`;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
+<!-- RA235612 - DIEGO LOPES CRISP -->
+<!-- RA235941 - IGOR FERREIRA ARANTES -->
+<!-- RA235441 - RODRIGO MATEUS DE MORAES -->
+
+
+
+
+
+
+
+
+
+
+
+
